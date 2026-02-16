@@ -15,6 +15,8 @@ void setup() {
   pinMode(D6, OUTPUT);
   pinMode(D7, OUTPUT);
   pinMode(D8, OUTPUT);
+  pinMode(D4, OUTPUT); // назначаем trigPin, как выход
+  pinMode(D2, INPUT); // назначаем echoPin, как вход
 
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
@@ -24,6 +26,22 @@ void setup() {
   Serial.println("Подключено к Wi-Fi!");
 
   client.setInsecure();
+}
+
+void ey(){
+  int cm,du;
+  digitalWrite(D4, LOW); // изначально датчик не посылает сигнал
+  delayMicroseconds(2); // ставим задержку в 2 ммикросекунд
+  digitalWrite(D4, HIGH); // посылаем сигнал
+  delayMicroseconds(10); // ставим задержку в 10 микросекунд
+  digitalWrite(D4, LOW); // выключаем сигнал
+
+  du = pulseIn(D2, HIGH); // включаем прием сигнала
+
+  cm = du / 58; // вычисляем расстояние в сантиметрах
+
+  Serial.print(cm); // выводим расстояние в сантиметрах
+  Serial.println(" cm");
 }
 
 void handleNewMessages(int numNewMessages) {
@@ -63,6 +81,10 @@ void handleNewMessages(int numNewMessages) {
 }
 
 void loop() {
+  while (1){
+    ey();
+    delay(100);
+  }
   int numNewMessages = bot.getUpdates(bot.last_message_received + 1); //id сообщения
 
   while (numNewMessages) {
