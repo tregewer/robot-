@@ -2,8 +2,8 @@
 #include <WiFiClientSecure.h>
 #include <UniversalTelegramBot.h>
 
-const char* ssid = "";
-const char* password = "";
+const char* ssid = "ASF";
+const char* password = "12345678";
 #define BOT_TOKEN ""
 
 WiFiClientSecure client;
@@ -28,7 +28,7 @@ void setup() {
   client.setInsecure();
 }
 
-void ey(){
+void ey(String chat_id){
   int cm,du;
   digitalWrite(D4, LOW); // изначально датчик не посылает сигнал
   delayMicroseconds(2); // ставим задержку в 2 ммикросекунд
@@ -41,7 +41,7 @@ void ey(){
   cm = du / 58; // вычисляем расстояние в сантиметрах
 
   Serial.print(cm); // выводим расстояние в сантиметрах
-  Serial.println(" cm");
+  bot.sendMessage(chat_id, "До препятствия: " + String(cm) + " см", "");
 }
 
 void handleNewMessages(int numNewMessages) {
@@ -49,42 +49,50 @@ void handleNewMessages(int numNewMessages) {
     String chat_id = String(bot.messages[i].chat_id);
     String text = bot.messages[i].text; //перебор сообщений
 
-    if (text == "/up") {
-      digitalWrite(D8,HIGH);
-      digitalWrite(D6,HIGH);
-      delay(5000); //!!!!!!!!!!!!!!!!!
-      digitalWrite(D8,LOW);
-      digitalWrite(D6,LOW);
+    if (text.startsWith("/up ")) {
+      int ti = text.substring(4).toInt() * 1000;
+      
+      digitalWrite(D7, HIGH);
+      digitalWrite(D6, HIGH);
+      delay(ti);
+      digitalWrite(D7, LOW);
+      digitalWrite(D6, LOW);
+      ey(chat_id);
     }
-    if (text == "/down") {
-      digitalWrite(D7,HIGH);
-      digitalWrite(D5,HIGH);
-      delay(5000); //!!!!!!!!!!!!!!!!!
-      digitalWrite(D7,LOW);
-      digitalWrite(D5,LOW);
-    }
-    if (text == "/right") {
+    if (text.startsWith("/down ")) {
+      int ti = text.substring(6).toInt() * 1000;
+      
       digitalWrite(D8,HIGH);
       digitalWrite(D5,HIGH);
-      delay(5000); //!!!!!!!!!!!!!!!!!
+      delay(ti);
       digitalWrite(D8,LOW);
       digitalWrite(D5,LOW);
+      ey(chat_id);
     }
-    if (text == "/left") {
-      digitalWrite(D6,HIGH);
+    if (text.startsWith("/right ")) {
+      int ti = text.substring(7).toInt() * 1000;
+
       digitalWrite(D7,HIGH);
-      delay(5000); //!!!!!!!!!!!!!!!!!
-      digitalWrite(D6,LOW);
+      digitalWrite(D5,HIGH);
+      delay(ti);
       digitalWrite(D7,LOW);
+      digitalWrite(D5,LOW);
+      ey(chat_id);
+    }
+    if (text.startsWith("/left ")) {
+      int ti = text.substring(6).toInt() * 1000;
+
+      digitalWrite(D6,HIGH);
+      digitalWrite(D8,HIGH);
+      delay(ti);
+      digitalWrite(D6,LOW);
+      digitalWrite(D8,LOW);
+      ey(chat_id);
     }
   }
 }
 
 void loop() {
-  while (1){
-    ey();
-    delay(100);
-  }
   int numNewMessages = bot.getUpdates(bot.last_message_received + 1); //id сообщения
 
   while (numNewMessages) {
