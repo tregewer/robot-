@@ -3,7 +3,7 @@
 #include <UniversalTelegramBot.h>
 
 const char* ssid = "ASF";
-const char* password = "********";
+const char* password = "";
 #define BOT_TOKEN ""
 
 WiFiClientSecure client;
