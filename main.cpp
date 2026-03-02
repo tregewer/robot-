@@ -11,8 +11,8 @@ UniversalTelegramBot bot(BOT_TOKEN, client);
 
 void setup() {
   Serial.begin(115200);
-  pinMode(S3, OUTPUT);
-  pinMode(S2, OUTPUT); //скорость
+  pinMode(10, OUTPUT);
+  pinMode(9, OUTPUT); //скорость
   pinMode(D5, OUTPUT);
   pinMode(D6, OUTPUT);
   pinMode(D7, OUTPUT);
