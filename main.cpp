@@ -7,7 +7,7 @@ const char* password = "";
 #define BOT_TOKEN ""
 
 WiFiClientSecure client; //включил HTTPS 
-UniversalTelegramBot bot(BOT_TOKEN, client); //записал токен бота
+UniversalTelegramBot bot(BOT_TOKEN, client); //записал токен бот
 
 void setup() {
   Serial.begin(115200);
