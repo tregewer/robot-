@@ -60,7 +60,7 @@ void handleNewMessages(int numNewMessages) {
         "/down X - движение назад на X секунд\n"
         "/left X - поворот влево на X секунд\n"
         "/right X - поворот вправо на X секунд\n"
-        "/help - показать список команд\n\n"
+        "/help - показать список команд\n\n";
       
       bot.sendMessage(chat_id, helpMessage, "");
       continue;  
