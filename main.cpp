@@ -11,8 +11,8 @@ UniversalTelegramBot bot(BOT_TOKEN, client); //инициализация бот
 
 void setup() {
   Serial.begin(115200);
-  pinMode(10, OUTPUT);
-  pinMode(9, OUTPUT); //скорость
+  pinMode(S3, OUTPUT);
+  pinMode(S2, OUTPUT); //скорость
   pinMode(D5, OUTPUT);
   pinMode(D6, OUTPUT);
   pinMode(D7, OUTPUT);
@@ -61,96 +61,61 @@ void handleNewMessages(int numNewMessages) {
         "/left X - поворот влево на X секунд\n"
         "/right X - поворот вправо на X секунд\n"
         "/help - показать список команд\n\n"
-        "/stop - остановка";
-
+      
       bot.sendMessage(chat_id, helpMessage, "");
-      continue;   // чтобы дальше код не выполнялся
+      continue;  
     }
-
-    // ОСТАНОВКА 
-    if (text == "/stop") {
-
-      digitalWrite(D5, LOW);
-      digitalWrite(D6, LOW);
-      digitalWrite(D7, LOW);
-      digitalWrite(D8, LOW);
-
-      analogWrite(10, 0);
-      analogWrite(9, 0);
-
-      bot.sendMessage(chat_id, "Моторы остановлены", "");
-      continue;
-    }
-    // Движение вперед 
+    
     if (text.startsWith("/up ")) {
       int ti = text.substring(4).toInt() * 1000;
-
+      
       digitalWrite(D7, HIGH);
       digitalWrite(D6, HIGH);
-      analogWrite(10, 512);
-      analogWrite(9, 512);
-
+      analogWrite(S2, 512);
+      analogWrite(S3, 512);
       delay(ti);
-
       digitalWrite(D7, LOW);
       digitalWrite(D6, LOW);
-
       ey(chat_id);
     }
-
-    // Назад 
     if (text.startsWith("/down ")) {
       int ti = text.substring(6).toInt() * 1000;
-
+      
       digitalWrite(D8,HIGH);
       digitalWrite(D5,HIGH);
-      analogWrite(10, 512);
-      analogWrite(9, 512);
-
+      analogWrite(S2, 512);
+      analogWrite(S3, 512);
       delay(ti);
-
       digitalWrite(D8,LOW);
       digitalWrite(D5,LOW);
-
       ey(chat_id);
     }
-
-    // Вправо 
     if (text.startsWith("/right ")) {
       int ti = text.substring(7).toInt() * 1000;
 
       digitalWrite(D7,HIGH);
       digitalWrite(D5,HIGH);
-      analogWrite(10, 512);
-      analogWrite(9, 512);
-
+      analogWrite(S2, 512);
+      analogWrite(S3, 512);
       delay(ti);
-
       digitalWrite(D7,LOW);
       digitalWrite(D5,LOW);
-
       ey(chat_id);
     }
-
-    // Влево 
     if (text.startsWith("/left ")) {
       int ti = text.substring(6).toInt() * 1000;
 
       digitalWrite(D6,HIGH);
       digitalWrite(D8,HIGH);
-      analogWrite(10, 512);
-      analogWrite(9, 512);
-
+      analogWrite(S2, 512);
+      analogWrite(S3, 512); //1023
       delay(ti);
-
       digitalWrite(D6,LOW);
       digitalWrite(D8,LOW);
-
       ey(chat_id);
     }
   }
 }
-
 void loop() {
   int numNewMessages = bot.getUpdates(bot.last_message_received + 1); //id сообщения
 
