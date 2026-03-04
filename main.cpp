@@ -41,7 +41,11 @@ void ey(String chat_id){
   du = pulseIn(D2, HIGH); // включаем прием сигнала
 
   cm = du / 58; // вычисляем расстояние в сантиметрах
-
+  
+if (cm >= 400) {
+    bot.sendMessage(chat_id, "Расстояние превышено.", "");
+    return;
+}
   Serial.print(cm); // выводим расстояние в сантиметрах
   bot.sendMessage(chat_id, "До препятствия: " + String(cm) + " см", "");
 }
