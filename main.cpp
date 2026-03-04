@@ -61,13 +61,13 @@ void handleNewMessages(int numNewMessages) {
         "/left X - поворот влево на X секунд\n"
         "/right X - поворот вправо на X секунд\n"
         "/help - показать список команд\n\n"
-        "/stop - мгновенная остановка";
+        "/stop - остановка";
 
       bot.sendMessage(chat_id, helpMessage, "");
       continue;   // чтобы дальше код не выполнялся
     }
 
-    // МГНОВЕННАЯ ОСТАНОВКА 
+    // ОСТАНОВКА 
     if (text == "/stop") {
 
       digitalWrite(D5, LOW);
