@@ -55,7 +55,7 @@ void handleNewMessages(int numNewMessages) {
     // Команда HELP
     if (text == "/help") {
       String helpMessage = 
-        "🤖 Список команд:\n\n"
+        "Список команд:\n\n"
         "/up X - движение вперед на X секунд\n"
         "/down X - движение назад на X секунд\n"
         "/left X - поворот влево на X секунд\n"
@@ -78,7 +78,7 @@ void handleNewMessages(int numNewMessages) {
       analogWrite(S2, 0);
       analogWrite(S3, 0);
 
-      bot.sendMessage(chat_id, "🛑 Моторы остановлены", "");
+      bot.sendMessage(chat_id, "Моторы остановлены", "");
       continue;
     }
     // Движение вперед 
