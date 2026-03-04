@@ -48,33 +48,60 @@ void ey(String chat_id){
 
 void handleNewMessages(int numNewMessages) {
   for (int i = 0; i < numNewMessages; i++) {
-    String chat_id = String(bot.messages[i].chat_id);
-    String text = bot.messages[i].text; //перебор сообщений
 
+    String chat_id = String(bot.messages[i].chat_id);
+    String text = bot.messages[i].text;
+
+    // ===== Команда HELP =====
+    if (text == "/help") {
+      String helpMessage = 
+        "🤖 Список команд:\n\n"
+        "/up X - движение вперед на X секунд\n"
+        "/down X - движение назад на X секунд\n"
+        "/left X - поворот влево на X секунд\n"
+        "/right X - поворот вправо на X секунд\n"
+        "/help - показать список команд\n\n"
+        "Пример: /up 2";
+
+      bot.sendMessage(chat_id, helpMessage, "");
+      continue;   // чтобы дальше код не выполнялся
+    }
+
+    // ===== Движение вперед =====
     if (text.startsWith("/up ")) {
       int ti = text.substring(4).toInt() * 1000;
-      
+
       digitalWrite(D7, HIGH);
       digitalWrite(D6, HIGH);
       analogWrite(S2, 512);
       analogWrite(S3, 512);
+
       delay(ti);
+
       digitalWrite(D7, LOW);
       digitalWrite(D6, LOW);
+
       ey(chat_id);
     }
+
+    // ===== Назад =====
     if (text.startsWith("/down ")) {
       int ti = text.substring(6).toInt() * 1000;
-      
+
       digitalWrite(D8,HIGH);
       digitalWrite(D5,HIGH);
       analogWrite(S2, 512);
       analogWrite(S3, 512);
+
       delay(ti);
+
       digitalWrite(D8,LOW);
       digitalWrite(D5,LOW);
+
       ey(chat_id);
     }
+
+    // ===== Вправо =====
     if (text.startsWith("/right ")) {
       int ti = text.substring(7).toInt() * 1000;
 
@@ -82,21 +109,29 @@ void handleNewMessages(int numNewMessages) {
       digitalWrite(D5,HIGH);
       analogWrite(S2, 512);
       analogWrite(S3, 512);
+
       delay(ti);
+
       digitalWrite(D7,LOW);
       digitalWrite(D5,LOW);
+
       ey(chat_id);
     }
+
+    // ===== Влево =====
     if (text.startsWith("/left ")) {
       int ti = text.substring(6).toInt() * 1000;
 
       digitalWrite(D6,HIGH);
       digitalWrite(D8,HIGH);
       analogWrite(S2, 512);
-      analogWrite(S3, 512); //1023
+      analogWrite(S3, 512);
+
       delay(ti);
+
       digitalWrite(D6,LOW);
       digitalWrite(D8,LOW);
+
       ey(chat_id);
     }
   }
