@@ -101,7 +101,7 @@ void handleNewMessages(int numNewMessages) {
     }
   }
 }
-
+privet
 void loop() {
   int numNewMessages = bot.getUpdates(bot.last_message_received + 1); //id сообщения
 
