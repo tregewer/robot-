@@ -75,8 +75,8 @@ void handleNewMessages(int numNewMessages) {
       digitalWrite(D7, LOW);
       digitalWrite(D8, LOW);
 
-      analogWrite(S2, 0);
-      analogWrite(S3, 0);
+      analogWrite(10, 0);
+      analogWrite(9, 0);
 
       bot.sendMessage(chat_id, "Моторы остановлены", "");
       continue;
@@ -104,8 +104,8 @@ void handleNewMessages(int numNewMessages) {
 
       digitalWrite(D8,HIGH);
       digitalWrite(D5,HIGH);
-      analogWrite(S2, 512);
-      analogWrite(S3, 512);
+      analogWrite(10, 512);
+      analogWrite(9, 512);
 
       delay(ti);
 
@@ -121,8 +121,8 @@ void handleNewMessages(int numNewMessages) {
 
       digitalWrite(D7,HIGH);
       digitalWrite(D5,HIGH);
-      analogWrite(S2, 512);
-      analogWrite(S3, 512);
+      analogWrite(10, 512);
+      analogWrite(9, 512);
 
       delay(ti);
 
