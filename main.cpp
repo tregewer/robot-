@@ -138,8 +138,8 @@ void handleNewMessages(int numNewMessages) {
 
       digitalWrite(D6,HIGH);
       digitalWrite(D8,HIGH);
-      analogWrite(S2, 512);
-      analogWrite(S3, 512);
+      analogWrite(10, 512);
+      analogWrite(9, 512);
 
       delay(ti);
 
