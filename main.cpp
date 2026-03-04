@@ -47,13 +47,15 @@ void ey(String chat_id){
 }
 
 void handleNewMessages(int numNewMessages) {
+  Serial.println("Новых сообщений: " + String(numNewMessages));
   for (int i = 0; i < numNewMessages; i++) {
-
     String chat_id = String(bot.messages[i].chat_id);
     String text = bot.messages[i].text;
+    text.trim(); // удаляем лишние пробелы
+    Serial.println("Текст сообщения: '" + text + "'");
 
-    // Команда HELP
-    if (text == "/help") {
+      // Команда HELP
+    if (text == "/help" || text.equalsIgnoreCase("/help")) {
       String helpMessage = 
         "Список команд:\n\n"
         "/up X - движение вперед на X секунд\n"
@@ -113,6 +115,10 @@ void handleNewMessages(int numNewMessages) {
       digitalWrite(D6,LOW);
       digitalWrite(D8,LOW);
       ey(chat_id);
+      }
+    else {
+      // Если команда не распознана, можно отправить подсказку
+      bot.sendMessage(chat_id, "Неизвестная команда. Введите /help для списка команд.", "");
     }
   }
 }
