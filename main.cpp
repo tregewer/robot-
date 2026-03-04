@@ -52,7 +52,7 @@ void handleNewMessages(int numNewMessages) {
     String chat_id = String(bot.messages[i].chat_id);
     String text = bot.messages[i].text;
 
-    // ===== Команда HELP =====
+    // Команда HELP
     if (text == "/help") {
       String helpMessage = 
         "🤖 Список команд:\n\n"
@@ -67,7 +67,21 @@ void handleNewMessages(int numNewMessages) {
       continue;   // чтобы дальше код не выполнялся
     }
 
-    // ===== Движение вперед =====
+    // МГНОВЕННАЯ ОСТАНОВКА 
+    if (text == "/stop") {
+
+      digitalWrite(D5, LOW);
+      digitalWrite(D6, LOW);
+      digitalWrite(D7, LOW);
+      digitalWrite(D8, LOW);
+
+      analogWrite(S2, 0);
+      analogWrite(S3, 0);
+
+      bot.sendMessage(chat_id, "🛑 Моторы остановлены", "");
+      continue;
+    }
+    // Движение вперед 
     if (text.startsWith("/up ")) {
       int ti = text.substring(4).toInt() * 1000;
 
@@ -84,7 +98,7 @@ void handleNewMessages(int numNewMessages) {
       ey(chat_id);
     }
 
-    // ===== Назад =====
+    // Назад 
     if (text.startsWith("/down ")) {
       int ti = text.substring(6).toInt() * 1000;
 
@@ -101,7 +115,7 @@ void handleNewMessages(int numNewMessages) {
       ey(chat_id);
     }
 
-    // ===== Вправо =====
+    // Вправо 
     if (text.startsWith("/right ")) {
       int ti = text.substring(7).toInt() * 1000;
 
@@ -118,7 +132,7 @@ void handleNewMessages(int numNewMessages) {
       ey(chat_id);
     }
 
-    // ===== Влево =====
+    // Влево 
     if (text.startsWith("/left ")) {
       int ti = text.substring(6).toInt() * 1000;
 
