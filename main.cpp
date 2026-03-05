@@ -224,7 +224,7 @@ void handleNewMessages(int numNewMessages) {
       // Забираем первую букву из полученного текста
       char direction = dirStr[0];
 
-      if (timeSec <= 0  diff < 0) {
+      if (timeSec <= 0 || diff < 0) {
         bot.sendMessage(chat_id, "Время должно быть больше нуля, а разница скоростей — не отрицательной", "");
         return;
       }
