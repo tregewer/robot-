@@ -23,14 +23,30 @@ UniversalTelegramBot bot(BOT_TOKEN, client); //инициализация бот
 
 void setup() {
   Serial.begin(115200);
-  pinMode(S3, OUTPUT);
-  pinMode(S2, OUTPUT); //скорость
-  pinMode(D5, OUTPUT);
-  pinMode(D6, OUTPUT);
-  pinMode(D7, OUTPUT);
-  pinMode(D8, OUTPUT);
-  pinMode(D4, OUTPUT); // назначаем trigPin, как выход
-  pinMode(D2, INPUT); // назначаем echoPin, как вход
+  delay(100); // небольшая задержка для стабильности
+
+  // Настройка ШИМ
+  pinMode(ENA, OUTPUT);
+  pinMode(ENB, OUTPUT);
+  analogWriteRange(1023);
+  analogWriteFreq(1000);
+
+  // Пины направления моторов
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+  pinMode(IN3, OUTPUT);
+  pinMode(IN4, OUTPUT);
+
+  // Инициализация: все моторы выключены, направления сброшены
+  stopMotors();
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, LOW);
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, LOW);
+
+  // Пины ультразвука
+  pinMode(TRIG, OUTPUT);
+  pinMode(ECHO, INPUT);
 
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
