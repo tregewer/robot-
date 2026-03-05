@@ -9,6 +9,18 @@ const char* password = "";
 WiFiClientSecure client; //создаем защищенный HTTPS клиент
 UniversalTelegramBot bot(BOT_TOKEN, client); //инициализация бота с токеном
 
+// Пины для управления моторами (L298N)
+#define ENA D1   // ШИМ скорость левого мотора
+#define ENB D3   // ШИМ скорость правого мотора
+#define IN1 D5   // Направление левого мотора
+#define IN2 D6   // Направление левого мотора
+#define IN3 D7   // Направление правого мотора
+#define IN4 D8   // Направление правого мотора
+
+// Пины для ультразвукового датчика HC-SR04
+#define TRIG D4
+#define ECHO D2
+
 void setup() {
   Serial.begin(115200);
   pinMode(S3, OUTPUT);
