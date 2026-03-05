@@ -58,6 +58,12 @@ void setup() {
   client.setInsecure();
 }
 
+// Функция остановки моторов
+void stopMotors() {
+  analogWrite(ENA, 0);
+  analogWrite(ENB, 0);
+}
+
 void ey(String chat_id){
   int cm,du;
   digitalWrite(D4, LOW); // изначально датчик не посылает сигнал
