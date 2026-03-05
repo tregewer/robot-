@@ -76,21 +76,35 @@ void ey(String chat_id){
 
   cm = du / 58; // вычисляем расстояние в сантиметрах
   
-if (cm >= 400) {
-    bot.sendMessage(chat_id, "Расстояние превышено.", "");
-    return;
-}
   Serial.print(cm); // выводим расстояние в сантиметрах
   bot.sendMessage(chat_id, "До препятствия: " + String(cm) + " см", "");
 }
 
 void handleNewMessages(int numNewMessages) {
-  Serial.println("Новых сообщений: " + String(numNewMessages));
   for (int i = 0; i < numNewMessages; i++) {
     String chat_id = String(bot.messages[i].chat_id);
     String text = bot.messages[i].text;
-    text.trim(); // удаляем лишние пробелы
-    Serial.println("Текст сообщения: '" + text + "'");
+    text.trim();
+
+    // Отладочный вывод в Serial
+    Serial.println("Получено сообщение: '" + text + "' от chat_id: " + chat_id);
+
+    // Удаляем возможное имя бота (часть после @)
+    String command = text;
+    int atPos = command.indexOf('@');
+    if (atPos > 0) {
+      command = command.substring(0, atPos);
+    }
+
+    // Отделяем аргументы (всё после первого пробела)
+    String args = "";
+    int spacePos = command.indexOf(' ');
+    if (spacePos > 0) {
+      args = command.substring(spacePos + 1);
+      command = command.substring(0, spacePos);
+    }
+    args.trim();
+    command.trim();
 
       // Команда HELP
     if (text == "/help" || text.equalsIgnoreCase("/help")) {
