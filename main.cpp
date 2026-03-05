@@ -60,8 +60,8 @@ void setup() {
 
 // Функция остановки моторов
 void stopMotors() {
-  analogWrite(ENA, 0);
-  analogWrite(ENB, 0);
+  digitalWrite(ENA, 0);
+  digitalWrite(ENB, 0);
 }
 
 void ey(String chat_id){
@@ -114,63 +114,157 @@ void handleNewMessages(int numNewMessages) {
         "/down X - движение назад на X секунд\n"
         "/left X - поворот влево на X секунд\n"
         "/right X - поворот вправо на X секунд\n"
+        "/arc L 3 300 (дуга: L или R, время сек, разница скоростей)\n"
         "/help - показать список команд\n\n";
-      
       bot.sendMessage(chat_id, helpMessage, "");
       continue;  
     }
     
-    if (text.startsWith("/up ")) {
-      int ti = text.substring(4).toInt() * 1000;
-      
-      digitalWrite(D7, HIGH);
-      digitalWrite(D6, HIGH);
-      analogWrite(S2, 512);
-      analogWrite(S3, 512);
-      delay(ti);
-      digitalWrite(D7, LOW);
-      digitalWrite(D6, LOW);
-      ey(chat_id);
-    }
-    if (text.startsWith("/down ")) {
-      int ti = text.substring(6).toInt() * 1000;
-      
-      digitalWrite(D8,HIGH);
-      digitalWrite(D5,HIGH);
-      analogWrite(S2, 512);
-      analogWrite(S3, 512);
-      delay(ti);
-      digitalWrite(D8,LOW);
-      digitalWrite(D5,LOW);
-      ey(chat_id);
-    }
-    if (text.startsWith("/right ")) {
-      int ti = text.substring(7).toInt() * 1000;
-
-      digitalWrite(D7,HIGH);
-      digitalWrite(D5,HIGH);
-      analogWrite(S2, 512);
-      analogWrite(S3, 512);
-      delay(ti);
-      digitalWrite(D7,LOW);
-      digitalWrite(D5,LOW);
-      ey(chat_id);
-    }
-    if (text.startsWith("/left ")) {
-      int ti = text.substring(6).toInt() * 1000;
-
-      digitalWrite(D6,HIGH);
-      digitalWrite(D8,HIGH);
-      analogWrite(S2, 512);
-      analogWrite(S3, 512); //1023
-      delay(ti);
-      digitalWrite(D6,LOW);
-      digitalWrite(D8,LOW);
-      ey(chat_id);
+    // ВПЕРЕД
+    else if (command == "/up") {
+      int ti = args.toInt() * 1000; // переводим секунды в миллисекунды
+      if (ti <= 0) {
+        bot.sendMessage(chat_id, "Укажите положительное время (сек), например /up 2", "");
+        return;
       }
+
+      // Направление: оба мотора вперёд
+      digitalWrite(IN1, LOW);
+      digitalWrite(IN2, HIGH);
+      digitalWrite(IN3, HIGH);
+      digitalWrite(IN4, LOW);
+
+      analogWrite(ENA, 700);
+      analogWrite(ENB, 700);
+      delay(ti);
+      stopMotors();
+      ey(chat_id); // измеряем расстояние после движения
+    }
+// НАЗАД
+    else if (command == "/down") {
+      int ti = args.toInt() * 1000;
+      if (ti <= 0) {
+        bot.sendMessage(chat_id, "Укажите положительное время (сек), например /down 2", "");
+        return;
+      }
+
+      digitalWrite(IN1, HIGH);
+      digitalWrite(IN2, LOW);
+      digitalWrite(IN3, LOW);
+      digitalWrite(IN4, HIGH);
+
+      analogWrite(ENA, 700);
+      analogWrite(ENB, 700);
+
+      delay(ti);
+      stopMotors();
+      ey(chat_id);
+    }
+
+    // ВПРАВО (поворот на месте)
+    else if (command == "/right") {
+      int ti = args.toInt() * 1000;
+      if (ti <= 0) {
+        bot.sendMessage(chat_id, "Укажите положительное время (сек), например /right 1", "");
+        return;
+      }
+
+      // Левое колесо вперёд, правое назад
+      digitalWrite(IN1, LOW);
+      digitalWrite(IN2, HIGH);
+      digitalWrite(IN3, LOW);
+      digitalWrite(IN4, HIGH);
+
+      analogWrite(ENA, 700);
+      analogWrite(ENB, 700);
+
+      delay(ti);
+      stopMotors();
+      ey(chat_id);
+    }
+
+    // ВЛЕВО (поворот на месте)
+    else if (command == "/left") {
+      int ti = args.toInt() * 1000;
+      if (ti <= 0) {
+        bot.sendMessage(chat_id, "Укажите положительное время (сек), например /left 1", "");
+        return;
+      }
+
+      // Левое назад, правое вперёд
+      digitalWrite(IN1, HIGH);
+      digitalWrite(IN2, LOW);
+      digitalWrite(IN3, HIGH);
+      digitalWrite(IN4, LOW);
+
+      analogWrite(ENA, 700);
+      analogWrite(ENB, 700);
+
+      delay(ti);
+      stopMotors();
+      ey(chat_id);
+    }
+
+  // ДУГА
+    else if (command == "/arc") {
+      char dirStr[10]; // ОБЯЗАТЕЛЬНО объявляем переменную-строку
+      int timeSec = 0;
+      int diff = 0;
+
+      // Используем %s (строка), и перед dirStr НЕ ставим знак &, так как это массив
+      int parsed = sscanf(args.c_str(), "%s %d %d", dirStr, &timeSec, &diff);
+
+      // Если не удалось прочитать все 3 параметра
+      if (parsed != 3) {
+        String errMsg = "Ошибка формата!\nКонтроллер увидел аргументы: '" + args + "'\nПример: /arc L 3 300";
+        bot.sendMessage(chat_id, errMsg, "");
+        return;
+      }
+
+      // Забираем первую букву из полученного текста
+      char direction = dirStr[0];
+
+      if (timeSec <= 0  diff < 0) {
+        bot.sendMessage(chat_id, "Время должно быть больше нуля, а разница скоростей — не отрицательной", "");
+        return;
+      }
+
+      int ti = timeSec * 1000;
+      int baseSpeed = 1023; // Максимальная мощность для поворота
+      int leftSpeed = baseSpeed;
+      int rightSpeed = baseSpeed;
+
+      // Определяем, какое колесо притормаживает
+      if (direction == 'L'  direction == 'l') {
+        leftSpeed = baseSpeed - diff;
+      } else if (direction == 'R' || direction == 'r') {
+        rightSpeed = baseSpeed - diff;
+      } else {
+        bot.sendMessage(chat_id, "Направление должно быть L или R", "");
+        return;
+      }
+
+      // Защита от выхода за пределы ШИМ
+      leftSpeed = constrain(leftSpeed, 0, 1023);
+      rightSpeed = constrain(rightSpeed, 0, 1023);
+
+      // Направление: оба мотора вперёд
+      digitalWrite(IN1, LOW);
+      digitalWrite(IN2, HIGH);
+      digitalWrite(IN3, HIGH);
+      digitalWrite(IN4, LOW);
+
+      // Скорость
+      analogWrite(ENA, leftSpeed);
+      analogWrite(ENB, rightSpeed);
+
+      // Ждем, останавливаем и меряем расстояние
+      delay(ti);
+      stopMotors();
+      ey(chat_id);
+    }
     else {
-      // Если команда не распознана, можно отправить подсказку
-      bot.sendMessage(chat_id, "Неизвестная команда. Введите /help для списка команд.", "");
+      bot.sendMessage(chat_id, "Неизвестная команда. /help", "");
     }
   }
 }
