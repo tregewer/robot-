@@ -235,7 +235,7 @@ void handleNewMessages(int numNewMessages) {
       int rightSpeed = baseSpeed;
 
       // Определяем, какое колесо притормаживает
-      if (direction == 'L'  direction == 'l') {
+      if (direction == 'L' || direction == 'l') {
         leftSpeed = baseSpeed - diff;
       } else if (direction == 'R' || direction == 'r') {
         rightSpeed = baseSpeed - diff;
