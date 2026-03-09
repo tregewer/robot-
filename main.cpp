@@ -55,6 +55,27 @@ void setup() {
   }
   Serial.println("Подключено к Wi-Fi!");
 
+// Очищаем очередь старых сообщений
+    WiFiClientSecure client2;
+  client2.setInsecure();
+  if (client2.connect("api.telegram.org", 443)) {
+    String request = "GET /bot";
+    request += BOT_TOKEN;
+    request += "/deleteWebhook?drop_pending_updates=true HTTP/1.1\r\n";
+    request += "Host: api.telegram.org\r\n";
+    request += "Connection: close\r\n\r\n";
+    client2.print(request);
+    // Ждём ответа (необязательно, можно просто закрыть)
+    while (client2.connected()) {
+      String line = client2.readStringUntil('\n');
+      if (line == "\r") break;
+    }
+    client2.stop();
+    Serial.println("Очередь старых сообщений очищена");
+  } else {
+    Serial.println("Не удалось очистить очередь");
+  }
+
   client.setInsecure();
 }
 
