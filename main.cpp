@@ -156,35 +156,6 @@ void handleNewMessages(int numNewMessages) {
         return;
       }
 
-      unsigned long duration = sec * 1000UL;
-      unsigned long start = millis();
-
-      // Левое колесо вперёд, правое назад
-      digitalWrite(IN1, LOW);
-      digitalWrite(IN2, HIGH);
-      digitalWrite(IN3, LOW);
-      digitalWrite(IN4, HIGH);
-      analogWrite(ENA, SPEED_NORMAL);
-      analogWrite(ENB, SPEED_NORMAL);
-
-      bool aborted = false;
-      while (millis() - start < duration) {
-        int dist = getDistance();
-        if (dist <= 10) {
-          stopMotors();
-          bot.sendMessage(chat_id, " Препятствие ближе 10 см! Поворот вправо остановлен.", "");
-          aborted = true;
-          break;
-        }
-        delay(50);
-      }
-
-      if (!aborted) {
-        stopMotors();
-        ey(chat_id);
-      }
-    }
-
       // Направление: оба мотора вперёд
       digitalWrite(IN1, LOW);
       digitalWrite(IN2, HIGH);
