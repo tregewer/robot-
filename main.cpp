@@ -21,6 +21,12 @@ UniversalTelegramBot bot(BOT_TOKEN, client); //инициализация бот
 #define TRIG D4
 #define ECHO D2
 
+// Константы скоростей
+#define SPEED_NORMAL 700    // обычная скорость
+#define SPEED_TURN_FAST 900  // быстрое колесо при повороте
+#define SPEED_TURN_SLOW 500  // медленное колесо при повороте
+#define MAX_SPEED 1023       // максимальная скорость
+
 void setup() {
   Serial.begin(115200);
   delay(100); // небольшая задержка для стабильности
