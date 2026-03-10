@@ -135,6 +135,7 @@ void handleNewMessages(int numNewMessages) {
         "/down X - движение назад на X секунд\n"
         "/left X - поворот влево на X секунд\n"
         "/right X - поворот вправо на X секунд\n"
+        "/turn90 left/right - поворот на 90 градусов\n"
         "/arc L 3 300 (дуга: L или R, время сек, разница скоростей)\n"
         "/help - показать список команд\n\n";
       bot.sendMessage(chat_id, helpMessage, "");
@@ -254,7 +255,46 @@ void handleNewMessages(int numNewMessages) {
       stopMotors();
       ey(chat_id);
     }
+//ПОВОРОТ НА 90 ГРАДУСОВ
+else if (command == "/turn90") {
+    String direction = args;
+    direction.toLowerCase();
+    
+    if (direction != "left" && direction != "right") {
+        bot.sendMessage(chat_id, "Укажите направление: /turn90 left или /turn90 right", "");
+        return;
+    }
 
+    int turnTime = 1500; // 1.5 секунды 
+    int speedDiff = 400; // разница скоростей для поворота
+    
+    bot.sendMessage(chat_id, "Поворачиваю " + direction + " на 90° (передний привод)", "");
+    
+    if (direction == "left") {
+        // Поворот налево: правое быстрее левого
+        digitalWrite(IN1, LOW);
+        digitalWrite(IN2, HIGH);
+        digitalWrite(IN3, HIGH);
+        digitalWrite(IN4, LOW);
+        
+        analogWrite(ENA, 500);  // левое медленнее
+        analogWrite(ENB, 900);  // правое быстрее
+    } 
+    else {
+        // Поворот направо: левое быстрее правого
+        digitalWrite(IN1, LOW);
+        digitalWrite(IN2, HIGH);
+        digitalWrite(IN3, HIGH);
+        digitalWrite(IN4, LOW);
+        
+        analogWrite(ENA, 900);  // левое быстрее
+        analogWrite(ENB, 500);  // правое медленнее
+    }
+    
+    delay(turnTime);
+    stopMotors();
+    ey(chat_id);
+}
   // ДУГА
     else if (command == "/arc") {
       char dirStr[10]; // ОБЯЗАТЕЛЬНО объявляем переменную-строку
