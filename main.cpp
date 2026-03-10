@@ -242,7 +242,7 @@ else if (command == "/turn90") {
         return;
     }
 
-    int turnTime = 1550; // 1.55 секунды 
+    int turnTime = 1300; // 1.3 секунды 
     int speedDiff = 400; // разница скоростей для поворота
     
     bot.sendMessage(chat_id, "Поворачиваю " + direction + " на 90° (передний привод)", "");
