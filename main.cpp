@@ -164,8 +164,8 @@ void handleNewMessages(int numNewMessages) {
       digitalWrite(IN2, HIGH);
       digitalWrite(IN3, LOW);
       digitalWrite(IN4, HIGH);
-      analogWrite(ENA, 700);
-      analogWrite(ENB, 700);
+      analogWrite(ENA, SPEED_NORMAL);
+      analogWrite(ENB, SPEED_NORMAL);
 
       bool aborted = false;
       while (millis() - start < duration) {
@@ -191,8 +191,8 @@ void handleNewMessages(int numNewMessages) {
       digitalWrite(IN3, HIGH);
       digitalWrite(IN4, LOW);
 
-      analogWrite(ENA, 700);
-      analogWrite(ENB, 700);
+      analogWrite(ENA, SPEED_NORMAL);
+      analogWrite(ENB, SPEED_NORMAL);
       delay(ti);
       stopMotors();
       ey(chat_id); // измеряем расстояние после движения
@@ -210,8 +210,8 @@ void handleNewMessages(int numNewMessages) {
       digitalWrite(IN3, LOW);
       digitalWrite(IN4, HIGH);
 
-      analogWrite(ENA, 700);
-      analogWrite(ENB, 700);
+      analogWrite(ENA, SPEED_NORMAL);
+      analogWrite(ENB, SPEED_NORMAL);
 
       delay(ti);
       stopMotors();
@@ -232,8 +232,8 @@ void handleNewMessages(int numNewMessages) {
       digitalWrite(IN3, LOW);
       digitalWrite(IN4, HIGH);
 
-      analogWrite(ENA, 700);
-      analogWrite(ENB, 700);
+      analogWrite(ENA, SPEED_NORMAL);
+      analogWrite(ENB, SPEED_NORMAL);
 
       delay(ti);
       stopMotors();
@@ -254,8 +254,8 @@ void handleNewMessages(int numNewMessages) {
       digitalWrite(IN3, HIGH);
       digitalWrite(IN4, LOW);
 
-      analogWrite(ENA, 700);
-      analogWrite(ENB, 700);
+      analogWrite(ENA, SPEED_NORMAL);
+      analogWrite(ENB, SPEED_NORMAL);
 
       delay(ti);
       stopMotors();
@@ -283,8 +283,8 @@ else if (command == "/turn90") {
         digitalWrite(IN3, HIGH);
         digitalWrite(IN4, LOW);
         
-        analogWrite(ENA, 500);  // левое медленнее
-        analogWrite(ENB, 900);  // правое быстрее
+        analogWrite(ENA, SPEED_TURN_SLOW );  // левое медленнее
+        analogWrite(ENB, SPEED_TURN_FAST );  // правое быстрее
     } 
     else {
         // Поворот направо: левое быстрее правого
@@ -293,8 +293,8 @@ else if (command == "/turn90") {
         digitalWrite(IN3, HIGH);
         digitalWrite(IN4, LOW);
         
-        analogWrite(ENA, 900);  // левое быстрее
-        analogWrite(ENB, 500);  // правое медленнее
+        analogWrite(ENA, SPEED_TURN_FAST);  // левое быстрее
+        analogWrite(ENB, SPEED_TURN_SLOW );  // правое медленнее
     }
     
     delay(turnTime);
@@ -326,7 +326,7 @@ else if (command == "/turn90") {
       }
 
       int ti = timeSec * 1000;
-      int baseSpeed = 1023; // Максимальная мощность для поворота
+      int baseSpeed = MAX_SPEED; // Максимальная мощность для поворота
       int leftSpeed = baseSpeed;
       int rightSpeed = baseSpeed;
 
@@ -341,8 +341,8 @@ else if (command == "/turn90") {
       }
 
       // Защита от выхода за пределы ШИМ
-      leftSpeed = constrain(leftSpeed, 0, 1023);
-      rightSpeed = constrain(rightSpeed, 0, 1023);
+      leftSpeed = constrain(leftSpeed, 0, MAX_SPEED);
+      rightSpeed = constrain(rightSpeed, 0, MAX_SPEED);
 
       // Направление: оба мотора вперёд
       digitalWrite(IN1, LOW);
