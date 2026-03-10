@@ -71,7 +71,6 @@ void setup() {
     request += "Host: api.telegram.org\r\n";
     request += "Connection: close\r\n\r\n";
     client2.print(request);
-    // Ждём ответа (необязательно, можно просто закрыть)
     while (client2.connected()) {
       String line = client2.readStringUntil('\n');
       if (line == "\r") break;
@@ -94,7 +93,7 @@ void stopMotors() {
 void ey(String chat_id){
   int cm,du;
   digitalWrite(D4, LOW); // изначально датчик не посылает сигнал
-  delayMicroseconds(2); // ставим задержку в 2 ммикросекунд
+  delayMicroseconds(2); // ставим задержку в 2 микросекунд
   digitalWrite(D4, HIGH); // посылаем сигнал
   delayMicroseconds(10); // ставим задержку в 10 микросекунд
   digitalWrite(D4, LOW); // выключаем сигнал
@@ -245,7 +244,7 @@ else if (command == "/turn90") {
     int turnTime = 1300; // 1.3 секунды 
     int speedDiff = 400; // разница скоростей для поворота
     
-    bot.sendMessage(chat_id, "Поворачиваю " + direction + " на 90° (передний привод)", "");
+    bot.sendMessage(chat_id, "Поворачиваю " + direction + " на 90°", "");
     
     if (direction == "left") {
         // Поворот налево: правое быстрее левого
