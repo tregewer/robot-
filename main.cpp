@@ -246,6 +246,11 @@ void handleNewMessages(int numNewMessages) {
       ey(chat_id);
     }
 
+    // РАССТОЯНИЕ
+    else if (command == "/dist") {
+      ey(chat_id);
+    }
+
     else {
       bot.sendMessage(chat_id, "Неизвестная команда. /help", "");
     }
