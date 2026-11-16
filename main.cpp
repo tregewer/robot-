@@ -140,3 +140,16 @@ void handleNewMessages(int numNewMessages) {
     }
     args.trim();
     command.trim();
+
+    // HELP
+    if (command == "/help") {
+      String helpMessage =
+        "Команды:\n"
+        "/up X (движение вперёд X секунд)\n"
+        "/down X (назад)\n"
+        "/left X (влево)\n"
+        "/right X (вправо)\n"
+        "/arc L 3 300 (дуга: L или R, время сек, разница скоростей)\n"
+        "Пример: /up 2";
+      bot.sendMessage(chat_id, helpMessage, "");
+    }
