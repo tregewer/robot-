@@ -92,3 +92,9 @@ void setup() {
   client.setInsecure();
   Serial.println("Бот готов к работе");
 }
+
+// Остановка моторов
+void stopMotors() {
+  analogWrite(ENA, 0);
+  analogWrite(ENB, 0);
+}
