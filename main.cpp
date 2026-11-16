@@ -231,3 +231,52 @@ void handleNewMessages(int numNewMessages) {
       stopMotors();
       ey(chat_id);
     }
+// ДУГА
+    else if (command == "/arc") {
+      char dirStr[10];
+      int timeSec = 0;
+      int diff = 0;
+
+      int parsed = sscanf(args.c_str(), "%9s %d %d", dirStr, &timeSec, &diff);
+
+      if (parsed != 3) {
+        String errMsg = "Ошибка формата!\nКонтроллер увидел аргументы: '" + args + "'\nПример: /arc L 3 300";
+        bot.sendMessage(chat_id, errMsg, "");
+        continue;
+      }
+
+      char direction = dirStr[0];
+
+      if (timeSec <= 0 || diff < 0) {
+        bot.sendMessage(chat_id, "Время должно быть больше нуля, а разница скоростей — не отрицательной", "");
+        continue;
+      }
+
+      int ti = timeSec * 1000;
+      int baseSpeed = 1023;
+      int leftSpeed = baseSpeed;
+      int rightSpeed = baseSpeed;
+
+      if (direction == 'L' || direction == 'l') {
+        leftSpeed = baseSpeed - diff;
+      } else if (direction == 'R' || direction == 'r') {
+        rightSpeed = baseSpeed - diff;
+      } else {
+        bot.sendMessage(chat_id, "Направление должно быть L или R", "");
+        continue;
+      }
+
+      leftSpeed = constrain(leftSpeed, 0, 1023);
+      rightSpeed = constrain(rightSpeed, 0, 1023);
+
+      digitalWrite(IN1, LOW);
+      digitalWrite(IN2, HIGH);
+      digitalWrite(IN3, HIGH);
+      digitalWrite(IN4, LOW);
+
+      analogWrite(ENA, leftSpeed);
+      analogWrite(ENB, rightSpeed);
+      delay(ti);
+      stopMotors();
+      ey(chat_id);
+    }
