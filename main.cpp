@@ -20,3 +20,36 @@ UniversalTelegramBot bot(BOT_TOKEN, client);
 // Пины для ультразвукового датчика HC-SR04
 #define TRIG D4
 #define ECHO D2
+void setup() {
+  Serial.begin(115200);
+  delay(100); // небольшая задержка для стабильности
+  // Настройка ШИМ
+  pinMode(ENA, OUTPUT);
+  pinMode(ENB, OUTPUT);
+  analogWriteRange(1023);
+  analogWriteFreq(1000);
+  // Пины направления моторов
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+  pinMode(IN3, OUTPUT);
+  pinMode(IN4, OUTPUT);
+  // Инициализация: все моторы выключены, направления сброшены
+  stopMotors();
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, LOW);
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, LOW);
+  // Пины ультразвука
+  pinMode(TRIG, OUTPUT);
+  pinMode(ECHO, INPUT);
+  // Подключение к Wi-Fi
+  WiFi.begin(ssid, password);
+  Serial.print("Подключение к Wi-Fi");
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(1000);
+    Serial.print(".");
+  }
+  Serial.println("\nWiFi подключен");
+  client.setInsecure(); // для работы с Telegram без проверки сертификата
+  Serial.println("Бот готов к работе");
+}
