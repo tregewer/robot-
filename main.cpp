@@ -115,3 +115,28 @@ void ey(String chat_id) {
     bot.sendMessage(chat_id, "До препятствия: " + String(distance) + " см", "");
   }
 }
+// Обработка входящих сообщений
+void handleNewMessages(int numNewMessages) {
+  for (int i = 0; i < numNewMessages; i++) {
+    String chat_id = String(bot.messages[i].chat_id);
+    String text = bot.messages[i].text;
+    text.trim();
+
+    Serial.println("Получено сообщение: '" + text + "' от chat_id: " + chat_id);
+
+    // Отделяем число после пробела
+    String command = text;
+    String args = "";
+    int spacePos = command.indexOf(' ');
+    if (spacePos > 0) {
+      args = command.substring(spacePos + 1);
+      command = command.substring(0, spacePos);
+    }
+
+    // Убираем имя бота после @
+    int atPos = command.indexOf('@');
+    if (atPos > 0) {
+      command = command.substring(0, atPos);
+    }
+    args.trim();
+    command.trim();
