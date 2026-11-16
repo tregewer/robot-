@@ -24,6 +24,9 @@ void ey(String chat_id);
 // Пины для ультразвукового датчика HC-SR04
 #define TRIG D4
 #define ECHO D2
+
+int speed = 700; // текущая скорость моторов
+
 void setup() {
   Serial.begin(115200);
   delay(100); // небольшая задержка для стабильности
@@ -131,8 +134,8 @@ void handleNewMessages(int numNewMessages) {
       digitalWrite(IN3, HIGH);
       digitalWrite(IN4, LOW);
 
-      analogWrite(ENA, 700);
-      analogWrite(ENB, 700);
+      analogWrite(ENA, speed);
+      analogWrite(ENB, speed);
       delay(ti);
       stopMotors();
       ey(chat_id);
@@ -150,8 +153,8 @@ void handleNewMessages(int numNewMessages) {
       digitalWrite(IN3, LOW);
       digitalWrite(IN4, HIGH);
 
-      analogWrite(ENA, 700);
-      analogWrite(ENB, 700);
+      analogWrite(ENA, speed);
+      analogWrite(ENB, speed);
       delay(ti);
       stopMotors();
       ey(chat_id);
@@ -170,8 +173,8 @@ void handleNewMessages(int numNewMessages) {
       digitalWrite(IN3, LOW);
       digitalWrite(IN4, HIGH);
 
-      analogWrite(ENA, 700);
-      analogWrite(ENB, 700);
+      analogWrite(ENA, speed);
+      analogWrite(ENB, speed);
       delay(ti);
       stopMotors();
       ey(chat_id);
@@ -190,8 +193,8 @@ void handleNewMessages(int numNewMessages) {
       digitalWrite(IN3, HIGH);
       digitalWrite(IN4, LOW);
 
-      analogWrite(ENA, 700);
-      analogWrite(ENB, 700);
+      analogWrite(ENA, speed);
+      analogWrite(ENB, speed);
       delay(ti);
       stopMotors();
       ey(chat_id);
@@ -249,6 +252,17 @@ void handleNewMessages(int numNewMessages) {
     // РАССТОЯНИЕ
     else if (command == "/dist") {
       ey(chat_id);
+    }
+
+          // СКОРОСТЬ
+    else if (command == "/speed") {
+      int s = args.toInt();
+      if (s < 300 || s > 1023) {
+        bot.sendMessage(chat_id, "Скорость от 300 до 1023, сейчас " + String(speed), "");
+        continue;
+      }
+      speed = s;
+      bot.sendMessage(chat_id, "Скорость: " + String(speed), "");
     }
 
     else {
