@@ -191,3 +191,43 @@ void handleNewMessages(int numNewMessages) {
       stopMotors();
       ey(chat_id);
     }
+
+    // ВПРАВО
+    else if (command == "/right") {
+      int ti = args.toInt() * 1000;
+      if (ti <= 0) {
+        bot.sendMessage(chat_id, "Укажите положительное время (сек), например /right 1", "");
+        continue;
+      }
+
+      digitalWrite(IN1, LOW);
+      digitalWrite(IN2, HIGH);
+      digitalWrite(IN3, LOW);
+      digitalWrite(IN4, HIGH);
+
+      analogWrite(ENA, 700);
+      analogWrite(ENB, 700);
+      delay(ti);
+      stopMotors();
+      ey(chat_id);
+    }
+
+    // ВЛЕВО
+    else if (command == "/left") {
+      int ti = args.toInt() * 1000;
+      if (ti <= 0) {
+        bot.sendMessage(chat_id, "Укажите положительное время (сек), например /left 1", "");
+        continue;
+      }
+
+      digitalWrite(IN1, HIGH);
+      digitalWrite(IN2, LOW);
+      digitalWrite(IN3, HIGH);
+      digitalWrite(IN4, LOW);
+
+      analogWrite(ENA, 700);
+      analogWrite(ENB, 700);
+      delay(ti);
+      stopMotors();
+      ey(chat_id);
+    }
