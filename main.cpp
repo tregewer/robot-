@@ -280,3 +280,9 @@ void handleNewMessages(int numNewMessages) {
       stopMotors();
       ey(chat_id);
     }
+
+    else {
+      bot.sendMessage(chat_id, "Неизвестная команда. /help", "");
+    }
+  }
+}
