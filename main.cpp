@@ -98,3 +98,20 @@ void stopMotors() {
   analogWrite(ENA, 0);
   analogWrite(ENB, 0);
 }
+// Измерение расстояния и отправка в Telegram
+void ey(String chat_id) {
+  digitalWrite(TRIG, LOW);
+  delayMicroseconds(2);
+  digitalWrite(TRIG, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIG, LOW);
+
+  long duration = pulseIn(ECHO, HIGH, 30000);
+  int distance = duration / 58;
+
+  if (duration == 0 || distance >= 400) {
+    bot.sendMessage(chat_id, "Расстояние превышено (более 4 м).", "");
+  } else {
+    bot.sendMessage(chat_id, "До препятствия: " + String(distance) + " см", "");
+  }
+}
